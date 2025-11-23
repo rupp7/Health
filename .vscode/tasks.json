@@ -1,0 +1,36 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "Build CLI.Health",
+			"type": "process",
+			"command": "dotnet",
+			"args": [
+				"build",
+				"${workspaceFolder}/CLI.Health/CLI.Health.csproj",
+				"-c",
+				"Debug"
+			],
+			"problemMatcher": "$msCompile"
+		},
+		{
+			"label": "Run MAUI (Windows)",
+			"type": "shell",
+			"command": "dotnet",
+			"args": [
+				"build",
+				"${workspaceFolder}/HealthMaui/HealthMaui.csproj",
+				"-t:Run",
+				"-f",
+				"net8.0-windows10.0.19041.0",
+				"-c",
+				"Debug"
+			],
+			"isBackground": false,
+			"problemMatcher": [
+				"$msCompile"
+			],
+			"group": "build"
+		}
+	]
+}

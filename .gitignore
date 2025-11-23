@@ -1,0 +1,23 @@
+﻿# Build outputs
+bin/
+obj/
+publish/
+# VS and user files
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+# Rider files
+.idea/
+# Rider caches
+*.iml
+# Mac/Linux
+.DS_Store
+# NuGet
+*.nupkg
+# Secrets/config
+appsettings.Development.json
+# MAUI / platform build artifacts
+**/bin/
+**/obj/

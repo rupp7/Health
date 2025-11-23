@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage x:Class="HealthMaui.Pages.AppointmentEditPage"
+             xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
+  <ScrollView>
+    <VerticalStackLayout Padding="16" Spacing="8">
+      <Picker x:Name="PatientPicker" Title="Patient"/>
+      <Picker x:Name="PhysicianPicker" Title="Physician"/>
+      <DatePicker x:Name="DatePicker"/>
+      <TimePicker x:Name="StartTime" />
+      <Entry x:Name="DurationMins" Placeholder="Duration minutes" Keyboard="Numeric"/>
+      <Label x:Name="Error" TextColor="Tomato" IsVisible="False"/>
+      <Button Text="Save" Clicked="SaveClicked"/>
+    </VerticalStackLayout>
+  </ScrollView>
+</ContentPage>

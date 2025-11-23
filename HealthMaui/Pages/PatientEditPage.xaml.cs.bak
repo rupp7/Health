@@ -1,0 +1,106 @@
+using CLI.Health.Application;
+using CLI.Health.Domain;
+using Microsoft.Extensions.DependencyInjection;
+
+namespace HealthMaui.Pages;
+
+public partial class PatientEditPage : ContentPage
+{
+    private readonly PatientService _service;
+
+    public PatientEditPage()
+    {
+        InitializeComponent();
+        _service = App.Services!.GetRequiredService<PatientService>();
+    }
+
+    protected override async void OnAppearing()
+    {
+        try
+        {
+            base.OnAppearing();
+
+            _patient = null;
+            if (!string.IsNullOrEmpty(Id) && Guid.TryParse(Id, out var guid))
+            {
+                _patient = await _svc.GetAsync(guid);
+            }
+
+            if (_patient is null)
+            {
+                BirthDate.Date = DateTime.Today;
+                RacePicker.SelectedIndex = 0;
+                GenderPicker.SelectedIndex = 0;
+                return;
+            }
+
+            FirstName.Text = _patient.FirstName;
+            LastName.Text  = _patient.LastName;
+            Address.Text   = _patient.Address;
+            BirthDate.Date = new DateTime(_patient.BirthDate.Year, _patient.BirthDate.Month, _patient.BirthDate.Day);
+            RacePicker.SelectedIndex   = (int)_patient.Race;
+            GenderPicker.SelectedIndex = (int)_patient.Gender;
+        }
+        catch (Exception ex)
+        {
+            await DisplayAlert("Error", $"Failed to load patient: {ex.Message}", "OK");
+        }
+
+    protected async void SaveClicked(object sender, EventArgs e)
+    {
+        try
+        {
+            var dob  = DateOnly.FromDateTime(BirthDate.Date);
+            var race = (Race)RacePicker.SelectedIndex;
+            var gen  = (Gender)GenderPicker.SelectedIndex;
+
+            if (_patient is null)
+            {
+                await _svc.CreateAsync(FirstName.Text ?? "", LastName.Text ?? "", dob, Address.Text ?? "", race, gen);
+            }
+            else
+            {
+                _patient.FirstName = FirstName.Text ?? "";
+                _patient.LastName  = LastName.Text ?? "";
+                _patient.Address   = Address.Text ?? "";
+                _patient.BirthDate = dob;
+                _patient.Race      = race;
+                _patient.Gender    = gen;
+                await _svc.UpdateAsync(_patient);
+            }
+            await Shell.Current.GoToAsync("..");
+        }
+        catch (Exception ex)
+        {
+            await DisplayAlert("Error", $"Failed to save patient: {ex.Message}", "OK");
+        }
+    }
+
+    protected async void AddNoteClicked(object sender, EventArgs e)
+    {
+        try
+        {
+            if (_patient is null)
+            {
+                await DisplayAlert("Save patient first", "Create the patient, then add a note.", "OK");
+                return;
+            }
+
+            _patient.AddNote(new MedicalNote
+            {
+                PatientId     = _patient.Id,
+                Diagnoses     = Dx.Text,
+                Prescriptions = Rx.Text,
+                FreeText      = null
+            });
+            await _svc.UpdateAsync(_patient); // persist change
+            Dx.Text = Rx.Text = string.Empty;
+            await DisplayAlert("Note added", "Medical note saved.", "OK");
+        }
+        catch (Exception ex)
+        {
+            await DisplayAlert("Error", $"Failed to add note: {ex.Message}", "OK");
+        }
+    }
+}
+}

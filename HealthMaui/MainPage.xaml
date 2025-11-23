@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="HealthMaui.MainPage">
+
+    <Grid RowDefinitions="Auto,Auto" 
+          Padding="20" 
+          RowSpacing="20">
+        
+        <Label 
+            Text="Health Management"
+            Grid.Row="0"
+            FontSize="24"
+            HorizontalOptions="Center" />
+
+        <Button 
+            Text="Show Patient List"
+            Grid.Row="1"
+            Clicked="OnShowPatientListClicked"
+            HorizontalOptions="Center" />
+            
+    </Grid>
+
+</ContentPage>

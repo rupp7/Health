@@ -1,0 +1,25 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      // Newer debugger: use "dotnet" (not "coreclr")
+      "name": ".NET Launch CLI.Health",
+      "type": "dotnet",
+      "request": "launch",
+      "projectPath": "$Health/CLI.Health/CLI.Health.csproj",
+      "preLaunchTask": "Build CLI.Health"
+    },
+    {
+      // For MAUI on Windows we *run with a task* (debug attach is optional)
+      "name": "Run HealthMaui (Windows)",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/.vscode/fake.js",
+      "preLaunchTask": "Run MAUI (Windows)",
+      "presentation": {
+        "reveal": "never",
+        "hidden": false
+      }
+    }
+  ]
+}

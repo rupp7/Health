@@ -4,7 +4,7 @@ This repository contains:
 
 - HealthMaui is a .NET MAUI front-end for Windows. It shows how to do Patients CRUD and search tasks by using a REST API.
 
-- Health.Api  -  ASP.NET Core WebAPI (in-memory store) that exposes REST endpoints for Patients.
+- Health.Api  -  ASP.NET Core WebAPI with file-based persistence that exposes REST endpoints for Patients.
 
 - Health.Core / CLI.Health  -  shared domain and service logic.
 
@@ -145,7 +145,8 @@ Invoke-RestMethod -Uri "http://localhost:7009/api/patients/search?q=alice" -Meth
 
 ## Notes and tips
 
-- The API uses an in-memory store (ConcurrentDictionary) for demo purposes. Data will be lost when the host stops.
+- **Data persistence**: The API uses a file-based persistence layer (`PatientFilebase.cs`) that stores each patient as a JSON file in `%TEMP%\Health\Patients`. Data persists across API restarts — when you stop and restart the API, previously saved patients will still be available. This allows users to turn the application off and on without losing their data.
+- **Storage location**: Patient data is stored in JSON format at: `C:\Users\{username}\AppData\Local\Temp\Health\Patients\`. Each patient is saved with their GUID as the filename (e.g., `9526acca-2545-4dc6-af05-e0adc0860fab.json`).
 - The MAUI app is wired to the API in `HealthMaui/MauiProgram.cs` by registering an `ApiPatientRepository`. To revert to the original in-memory behavior, change the `IPatientRepository` registration in `MauiProgram.cs` back to `InMemoryPatientRepository`.
 - The project intentionally avoids authentication/authorization and HTTPS for assignment simplicity.
 
